@@ -5,7 +5,7 @@ import sys
 argv = sys.argv
 data = pandas.read_csv(argv[1],nrows=int(argv[2]), header=None, names=['timestamp','chan','signal','datarate','phy','crc','length'])
 
-#CRC vs signal strengh
+#CRC vs signal strength
 
 bysignal = data.groupby('signal')['crc'].mean()
 samples = data.groupby('signal')['crc'].count()
@@ -24,9 +24,17 @@ fig.right_ax.set_yscale('log')
 plt.show()
 
 bysignal = data.groupby(['signal','chan'])['crc'].mean()
-print(bysignal)
+#print(bysignal)
 samples = data.groupby(['signal','chan'])['crc'].count()
 plt.figure()
 fig =bysignal.unstack().plot(subplots=True,title='percentage of correctly received packets vs signal strength')
 #samples.unstack().plot(ax=fig, secondary_y=True)
-#plt.show()
+plt.show()
+
+bydatarate = data.groupby(['signal','datarate'])['crc'].mean()
+print(bydatarate)
+samples = data.groupby(['signal','datarate'])['crc'].count()
+plt.figure()
+fig =bydatarate.unstack().plot(subplots=True,title='percentage of correctly received packets vs signal strength by datarate')
+#samples.unstack().plot(ax=fig, secondary_y=True)
+plt.show()
