@@ -26,6 +26,29 @@ In this report the effect of signal strength, frequency and data rate on the amo
 
 Packet loss can occur when the signal is insufficiently strong
 
+\subsection{SNR vs CRC}
+
+We expect to see a quick dropoff when the signal-to-noise ratio drops below the required SNR value.
+
+\subsection{packet length}
+We expect to see a linear amount of errors compared to packet length
+
+\subsection{errors by channel}
+We expect to see a difference in errors on different channels, depending on how busy they are.
+
+\subsection{datarates}
+We expect to see a higher amount of errors when seeing a low signal combined with a high datarate
+
+\subsection{resends}
+The amount of resends between a station and a receiver depends on the amount of CRC errors they detect on their communication. The ratio between the amount of CRC errors we detect, and the amount of resends, might tell us something about how close we are physically to the user. But this might be hard to implement.
+
+\section{Methodology}
+
+We capture packets using an intel wireless dualband-AC 8265. Alternatively, we attempted to capture packets on an ALPHA xxxx external wifi adapter, and a C.H.I.P. ARM devboard with buid in wifi.
+TShark was used to capture the packets. A python script was written for channelhopping.
+
+
+\section{results}
 
 \printbibliography
 
