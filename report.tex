@@ -2,6 +2,8 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage{graphicx}
+
  
 \usepackage[backend=biber]{biblatex}
 \addbibresource{sources.bib}
@@ -49,6 +51,29 @@ TShark was used to capture the packets. A python script was written for channelh
 
 
 \section{results}
+
+\subsection{signal strength versus crc errors}
+
+\begin{figure}
+		\includegraphicx[width=\textwidth]{figures/packets_total.png}
+		\caption{}
+		\label{fig:totalpackets}
+\end{figure}
+
+\begin{figure}
+		\includegraphicx[width=\textwidth]{figures/24ghz.png}
+		\caption{}
+		\label{fig:24packets}
+\end{figure}
+
+\begin{figure}
+		\includegraphicx[width=\textwidth]{figures/58ghz.png}
+		\caption{}
+		\label{fig:58packets}
+\end{figure}
+
+\subsection{Packet length}
+
 
 \printbibliography
 
