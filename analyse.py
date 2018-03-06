@@ -2,6 +2,9 @@ import pandas
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import sys
+import re
+import numpy as np
+import math
 
 argv = sys.argv
 data = pandas.read_csv(argv[1], nrows = int(argv[2]), header=None, names=['timestamp','chan','signal','datarate','phy','crc','length'])
@@ -78,8 +81,22 @@ def graphlength(data):
     fig.right_ax.set_yscale('log')
     plt.show()
 
-lengths = data.groupby('length')['crc'].mean().to_frame().reset_index(level=0)
-print(sm.OLS(lengths['length'], lengths['crc']).fit().summary())
-sm.graphics.plot_partregress('crc', 'length', ['crc','length'],data=lengths)
-plt.show()
+# lengths = data.groupby('length')['crc'].mean().to_frame().reset_index(level=0)
+# print(sm.OLS(lengths['length'], lengths['crc']).fit().summary())
+# sm.graphics.plot_partregress('crc', 'length', ['crc','length'],data=lengths)
+# plt.show()
 #graphlength(data)
+data['dataratefloat'] = data[['datarate']].applymap(lambda x: float(x.split(',')[0]))
+print(data[data.crc == 1][['crc','signal','dataratefloat']].groupby('signal')['dataratefloat'].max().to_frame())
+fig = data[data.crc == 1][['crc','signal','dataratefloat']].groupby('signal')['dataratefloat'].mean().plot(color='y', style='.-')
+fig2 = data[['crc','signal','dataratefloat']].groupby('signal')['dataratefloat'].mean().plot(color='b', style='.-')
+data[['crc','signal','dataratefloat']].groupby('signal')['dataratefloat'].max().plot(color='b', style='.-')
+data[data.crc == 1][['crc','signal','dataratefloat']].groupby('signal')['dataratefloat'].max().plot(color='y', style='.-')
+
+data[['crc','signal','dataratefloat']].groupby('signal')['dataratefloat'].min().plot(color='b', style='.-')
+data[data.crc == 1][['crc','signal','dataratefloat']].groupby('signal')['dataratefloat'].min().plot(color='y', style='.-')
+
+fig.set_ylabel("datarate [Mbps]")
+fig.set_xlabel("SSI signal strength [dBm]")
+fig.legend([fig,fig2],["all packets", "successful packets"])
+plt.show()
