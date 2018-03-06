@@ -104,14 +104,16 @@ def graph24ghz(data):
 def graphlength(data):
 
     samples = data.groupby('length')['crc'].count()
-    bylength = data.groupby('length')['crc'].mean()[samples>4].rolling(5).mean()
+    bylength = data.groupby('length')['crc'].mean()[samples>4]
     plt.figure()
-    fig =bylength[samples>4].plot(title='percentage of correctly received packets vs packet length')
-    bylength[samples>4].rolling(20).mean().plot()
+    fig =bylength[samples>4].plot(title='correctly received packets vs packet length', color='gray')
+    bylength[samples>4].rolling(20).mean().plot(color='black')
+    fig.set_ylabel("ratio of correct packets")
+    fig.set_xlabel("packet length [Bytes]")
     #samples[samples > 10].plot(ax=fig, secondary_y=True)
     #fig.right_ax.set_yscale('log')
-    l = np.arange(150,1700,1)
-    plt.plot(l, (1 - (0.001**l)))
+    #l = np.arange(150,1700,1)
+    #plt.plot(l, (1 - (0.001**l)))
 
     plt.show()
 
@@ -134,7 +136,7 @@ def graphairtime(data):
     fig =bylength[samples>4].plot(title='percentage of correctly received packets vs packet airtime',color='gray')
     bylength[samples>4].rolling(50).mean().plot(color='black')
     fig.set_xlabel("airtime [uS]")
-    fig.set_ylabel("non-crc error %")
+    fig.set_ylabel("non-crc error")
     #samples[samples > 10].plot(ax=fig, secondary_y=True)
     #fig.right_ax.set_yscale('log')
     #l = np.arange(150,1700,1)
@@ -142,12 +144,6 @@ def graphairtime(data):
 
     plt.show()
 
-
-# lengths = data.groupby('length')['crc'].mean().to_frame().reset_index(level=0)
-# print(sm.OLS(lengths['length'], lengths['crc']).fit().summary())
-# sm.graphics.plot_partregress('crc', 'length', ['crc','length'],data=lengths)
-# plt.show()
-#graphlength(data)
 
 def dataratevsstrength(data):
     data['dataratefloat'] = data[['datarate']].applymap(lambda x: float(x.split(',')[0]))
@@ -165,7 +161,13 @@ def dataratevsstrength(data):
     fig.legend([fig,fig2],["all packets", "successful packets"])
     plt.show()
 
-#graph24ghz72mbps(data)
+graphall(data)
+bydatarate(data)
+graph58ghz(data)
+graph24ghz(data)
+graph24ghz72mbps(data)
+graphlength(data)
 graphairtime(data)
+dataratevsstrength(data)
 #print(data.groupby('chan')['crc'].mean())
 #print(data.groupby('chan')['crc'].count())
