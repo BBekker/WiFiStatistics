@@ -1,0 +1,75 @@
+\documentclass{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+%\usepackage[margin = 1in]{geometry}
+ 
+%\usepackage{biblatex}
+%\addbibresource{sources.bib}
+
+\title{Paper Review: Automating 3D Wireless Measurements with Drones}
+\date{\today}
+\author{
+Bart Rijnders - 4103505 \\
+Bernard Bekker - 4221656 
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+
+\subsection{Problem}
+
+Wireless networks struggle with weak coverage, blind spots and interference. Studying signal propagation requires simulating the propagation but are often not accurate. Real world measurements are required for validation. The current existing methods require large amounts of time, effort and money. This paper proposes a solution by using drones to measure wireless signals, which could be an efficient method to analyze wireless coverage and signal propagation.
+
+\subsection{Challenges}
+
+Difficult to track 3D position of drones indoors.
+
+Drones are unstable during flight.
+
+\subsection{Solutions}
+
+\subsubsection{Measurement Module}
+
+The drone hovers over specified points for a specified duration and records wireless signal strength for one or multple AP's. For multple AP's the drone's radio can be configured in monitor mode. These functions are implemented in the Measurement Module.
+
+Both the drone and the computer that is used for input to the drone must be connected to the wireless network that is to be measured, since the drone cannot scan for other AP's when using it's own AP.
+
+Measurements are done by placing shell scripts on the drone's operating system. It uses \textit{iwconfig} to measure the current network's signal strength in dBm. The navigation module notifies when the measurements have to be taken. Then the drone gets the current coordinates, runs the appropriate measurement script and writes the result to file.
+
+\subsubsection{Navigation Module}
+
+The other module present in the drones is the Navigation Module. This module is responsible for moving the drone to the desired locations. It uses Reference Point Detection and an Extended Kalman Filter to track the current position of the drone. 
+
+When getting ready for a flight the module first parses the flight path and sends a takeoff signal to the drone. It also processes readings such as velocity, height. It also uses markers placed in the measurement area to determine it's position with Reference Point Detection followed by an Extended Kalman Filter. The drone is stabilized with a PID controller.
+
+\subsection{Results}
+
+\subsubsection{Navigation Accuracy}
+
+A small grid was used with reference points which the drone had to visit. When the drone was hovering above a measurement point the distance between the reference and the drone was measured to acquire the navigation error. This resulted in a mean error of 13 cm with a standard deviation of 4.3 centimeters. Which is below the error tolerance of 20 cm set in the software.
+
+\subsubsection{Flight efficiency}
+
+The drone was ordered to travel from one reference point to another reference point before landing, two different controllers were used to make sure the drone stopped at it's destination. This resulted in the PID controller helping the drone reach it's target faster and stopping the drone on time when the destination was reached.
+
+\subsubsection{Measurement Duration}
+
+When determining the optimal measurement duration two different locations where used as measurement points. The minimum required measurement time was observed to be 3 seconds, which is enough to counteract signal noise caused by the drone shaking lightly.
+
+\subsubsection{Measurement Accuracy}
+
+Prior studies have shown that presence of people nearby receivers inteferes with the measured signal strength. When using drones this is no longer a problem. The result was an average RSS of -80.48 dBm when using DroneSense. When standing near the drone this influences the signal strength thus demonstrating that using drones removes the variations when using humans to hold sensors.
+
+\section{Assessment}
+
+Overall the papers seems to cover the required aspects why it is better to use DroneSense compared to having people walk with sensors through an area which has to be measured. It has good in depth descriptions of the systems used in the drone and provides clear results.
+
+\section{Potential Improvements}
+%\printbibliography
+
+\end{document}
